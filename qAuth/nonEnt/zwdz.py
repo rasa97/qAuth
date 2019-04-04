@@ -1,6 +1,5 @@
 from cqc.pythonLib import CQCConnection, qubit
 import hashlib
-import time
 
 class Participants:
 
