@@ -12,16 +12,16 @@ class Participants:
             binary = format(int(i, 16), '04b')
             hash_binary = hash_binary + binary
 
-        """
-            In ideal settings, we can use the whole 256 bits of hash_binary for the authentication process.
-            Here however, we use just a subset of 10 bits from the whole 256 bits. The value of starting index
-            in the hash_binary for the subset_hash  is the decimal form of biary number produced by concatinating 
-            the first 4 bits of key and last 4 bit of random_key.
+        
+            # In ideal settings, we can use the whole 256 bits of hash_binary for the authentication process.
+            # Here however, we use just a subset of 10 bits from the whole 256 bits. The value of starting index
+            # in the hash_binary for the subset_hash  is the decimal form of biary number produced by concatinating 
+            # the first 4 bits of key and last 4 bit of random_key.
 
-            That is, if the first 4 bits of key is 1010 and the last 4 bits of random_key is 0101, the binary rep
-            of concatenaion operation = 10100101 and corresponsing decimal value is 165. Therefore, subset_hash is
-            hash_binary[165:174]
-        """
+            # That is, if the first 4 bits of key is 1010 and the last 4 bits of random_key is 0101, the binary rep
+            # of concatenaion operation = 10100101 and corresponsing decimal value is 165. Therefore, subset_hash is
+            # hash_binary[165:174]
+        
 
         concat = key[0:4] + random_key[-4:]
         decimal_concat = int(concat, 2)
