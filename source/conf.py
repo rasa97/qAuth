@@ -12,7 +12,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('./qAuth'))
+#sys.path.insert(0, os.path.abspath('../qAuth/nonEnt'))
 
 
 # -- Project information -----------------------------------------------------
@@ -31,6 +31,7 @@ release = '0.0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx.ext.autodoc'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -54,4 +55,4 @@ html_theme = 'alabaster'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-#sys.path.append(os.path.abspath('../qAuth'))
+sys.path.append(os.path.abspath('../qAuth/'))
