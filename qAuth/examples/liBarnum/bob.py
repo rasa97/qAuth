@@ -1,4 +1,9 @@
-from qAuth.ent.liBarnum import Receiver
+from qAuth.ent.liBarnum import Authenticator
 
-r = Receiver("Bob")
-r.authenticate()
+r = Authenticator("Bob")
+result = r.authenticate()
+
+if result:
+    print("Successful Authentication!")
+else:
+    print("Unsuccessful Authentcation!")

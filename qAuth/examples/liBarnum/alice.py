@@ -1,4 +1,4 @@
-from qAuth.ent.liBarnum import Sender
+from qAuth.ent.liBarnum import Prover
 
-s = Sender("Alice")
+s = Prover("Alice")
 s.authenticate("Bob")

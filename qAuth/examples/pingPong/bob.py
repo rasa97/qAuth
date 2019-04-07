@@ -1,7 +1,7 @@
-from qAuth.nonEnt.pingPong import Receiver
+from qAuth.nonEnt.pingPong import Prover
 
 key = '001001000100100111101110'
 
-r = Receiver("Bob")
+r = Prover("Bob")
 k_prime = r.authenticate(key, "Alice")
 print("Bob's k' = ", k_prime)

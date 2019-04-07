@@ -1,6 +1,6 @@
-from qAuth.nonEnt.zwdz import Sender
+from qAuth.nonEnt.zwdz import Prover
 
 key = '101010110001101110011001'
 
-s = Sender("Alice")
+s = Prover("Alice")
 s.authenticate(key, "Bob")

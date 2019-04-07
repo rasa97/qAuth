@@ -1,9 +1,35 @@
 from cqc.pythonLib import CQCConnection, qubit
 import random
 
+"""
+    Module implementing Ping Pong without Entanglement Protocol
+    Yuan, Hao, et al. "Quantum identity authentication based on ping-pong technique without entanglements." 
+    Quantum information processing 13.11 (2014): 2535-2549.
+"""
+
 class Participant:
 
     def prepareSequence(self, key, receiver):
+
+        """
+        Method that prepares the qubits
+        according to the protocol and 
+        sends it to the receiver.
+
+        Parameters
+        ----------
+
+        key        : str
+                     Secret Key Shared by two parties.
+        receiver : str
+                     Authenticator's name.
+        
+        Returns
+        -------
+        None
+            Does not return anything.
+        """
+
         with CQCConnection(self.name) as User:
             self.randomChoice = []
             for i in range(1, len(key), 2):
@@ -20,12 +46,51 @@ class Participant:
                 User.sendQubit(q, receiver)
     
     def encodeQubits(self, qubit_list, key):
+
+        """
+        Method that encodes the qubits
+        according to the protocol.
+
+        Parameters
+        ----------
+
+        qubit_list : list
+                     Authenticator's name.
+
+        key        : str
+                     Secret Key Shared by two parties.
+        
+        Returns
+        -------
+        None
+            Does not return anything.
+        """
+
         for i in range(0, len(key)-1, 2):
             if(key[i] != key[i+1]):
                 qubit_list[int(i/2)].X()
                 qubit_list[int(i/2)].Z()
     
     def update_key(self, qubit_list, key):
+
+        """
+        Method that updates the key.
+
+        Parameters
+        ----------
+
+        qubit_list : list
+                     Authenticator's name.
+
+        key        : str
+                     Secret Key Shared by two parties.
+        
+        Returns
+        -------
+        string
+            Updated key.
+        """
+
         k_temp = ["*"]*int(len(key))
         for i in range(1, len(key), 2):
             if(key[i] == '1'):
@@ -38,18 +103,53 @@ class Participant:
         return k_prime
 
 
-class Sender(Participant):
+class Authenticator(Participant):
 
     def __init__(self, name):
         self.name = name
 
     def authenticate(self, key, receiver):
+
+        """
+        Method that takes care of authenticator's job.
+
+        Parameters
+        ----------
+
+        key        : str
+                     Secret Key Shared by two parties.
+        
+        receiver   : str
+                     Prover's name
+        
+        Returns
+        -------
+        Boolean
+            Result of authentication check and updated key.
+        """
+
         self.prepareSequence(key, receiver)
         self.recvEncoded(key)
         check_kprime = self.checkAuth(key)
         return (check_kprime == self.k_prime, self.k_prime)
     
     def recvEncoded(self, key):
+
+        """
+        Method that receives the encoded qubits.
+
+        Parameters
+        ----------
+
+        key        : str
+                     Secret Key Shared by two parties.
+        
+        Returns
+        -------
+        None
+            Does not return anything.
+        """
+
         with CQCConnection(self.name) as User:
             incoming_qubits = []
             for i in range(int(len(key)/2)):
@@ -57,6 +157,22 @@ class Sender(Participant):
             self.k_prime = self.update_key(incoming_qubits, key)
     
     def checkAuth(self, key):
+
+        """
+        Method that authenticates the prover.
+
+        Parameters
+        ----------
+
+        key        : str
+                     Secret Key Shared by two parties.
+        
+        Returns
+        -------
+        str
+                Updated key.
+        """
+
         with CQCConnection(self.name) as User:
             qubit_list = []
             for i in range(1, len(key), 2):
@@ -75,16 +191,55 @@ class Sender(Participant):
             check_kprime = self.update_key(qubit_list, key)
             return check_kprime
 
-class Receiver(Participant):
+class Prover(Participant):
 
     def __init__(self, name):
         self.name = name
     
     def authenticate(self, key, sender):
+
+        """
+        Method that takes care of prover's job.
+
+        Parameters
+        ----------
+
+        key        : str
+                     Secret Key Shared by two parties.
+        
+        sender   : str
+                   Authenticator's name
+        
+        Returns
+        -------
+        str
+            Updated key.
+        """
+
         self.recvSequence(key, sender)
         return self.k_prime
     
     def recvSequence(self, key, name):
+
+        """
+        Method that receives ping pong particles
+        from authenticator.
+
+        Parameters
+        ----------
+
+        key    : str
+                 Secret Key Shared by two parties.
+        
+        name   : str
+                 Authenticator's name
+        
+        Returns
+        -------
+        None
+            Does not return anything.
+        """
+
         with CQCConnection(self.name) as User:
 
             incoming_qubits = []
@@ -96,6 +251,26 @@ class Receiver(Participant):
         self.sendEncoded(key, name)
     
     def sendEncoded(self, key, receiver):
+
+        """
+        Method that encodes ping pong particles
+        and send it to the authenticator.
+
+        Parameters
+        ----------
+
+        key         : str
+                      Key Shared by two parties.
+        
+        receiver    : str
+                      Authenticator's name
+        
+        Returns
+        -------
+        None
+            Does not return anything.
+        """
+
         with CQCConnection(self.name) as User:
 
             for i in range(1, len(key), 2):
