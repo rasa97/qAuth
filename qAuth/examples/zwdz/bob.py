@@ -1,12 +1,16 @@
 from qAuth.nonEnt.zwdz import Authenticator
 
-key = '101010110001101110011001'
+def main():
 
-r = Authenticator("Bob")
+    key = '101010110001101110011001'
 
-auth_result = r.authenticate(key)
+    r = Authenticator("Bob")
 
-if auth_result:
-    print("Successful authentication!")
-else:
-    print("Unsuccessful authentication!")
+    auth_result = r.authenticate(key)
+
+    if auth_result:
+        print("Successful authentication!")
+    else:
+        print("Unsuccessful authentication!")
+
+main()

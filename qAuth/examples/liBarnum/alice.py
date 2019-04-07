@@ -1,4 +1,7 @@
 from qAuth.ent.liBarnum import Prover
 
-s = Prover("Alice")
-s.authenticate("Bob")
+def main():
+    s = Prover("Alice")
+    s.authenticate("Bob")
+
+main()
