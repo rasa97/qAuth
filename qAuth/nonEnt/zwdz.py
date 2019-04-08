@@ -10,25 +10,25 @@ import hashlib
 
 class Participants:
 
+    """
+        Class which defines common functions.
+        Prover and Authenticator inherit this class.
+    """
+
     def createHash(self, key, random_key):
 
         """
         Method that takes in key and random_key
         to produce 64 bit hex hash value.
 
-        Parameters
-        ----------
+        :param key: Secret Key Shared by two parties.
+        :type key: str
+        :param random_key: Random key generated for this iteration for authentication.
+        :type random_key: str
 
-        key        : str
-                     Secret Key Shared by two parties.
-        random_key : str
-                     Random key generated for this 
-                     iteration for authentication.
+        :return: 64 bit hex hash value.
+        :rtype: str
         
-        Returns
-        -------
-        str
-            64 bit hex hash value.
         """
 
         final_key = key + random_key
@@ -60,7 +60,16 @@ class Participants:
 
 class Prover(Participants):
 
+    """
+        Class for Prover
+    """
+
     def __init__(self, name):
+
+        """
+            Creates a Prover by providing a name
+        """
+
         self.name = name
     
     def authenticate(self, key, receiver):
@@ -68,18 +77,10 @@ class Prover(Participants):
         """
         Method that takes care of prover's job.
 
-        Parameters
-        ----------
-
-        key        : str
-                     Secret Key Shared by two parties.
-        receiver : str
-                     Authenticator's name.
-        
-        Returns
-        -------
-        None
-            Does not return anything.
+        :param key: Secret Key Shared by two parties.
+        :type key: str
+        :param receiver: Authenticator's name.
+        :type receiver: str
         """
         
         random_key = self.createRandom()
@@ -92,18 +93,10 @@ class Prover(Participants):
         """
         Method that creates the random key for the
         iteration. Uses randomness of Quantum 
-        Mechanics to produce the required string
+        Mechanics to produce the required string.
 
-        Parameters
-        ----------
-
-        None
-            Does not require any parameters.
-        
-        Returns
-        -------
-        str
-            Returns 24 bit random bit string.
+        :return: Random key.
+        :rtype: String
         """
         
         random_key = ''
@@ -123,20 +116,10 @@ class Prover(Participants):
         suitable type so that we can send through
         the classical server provided by SimulaQron.
 
-        Parameters
-        ----------
-
-        random_key : str
-                     Random key generated for this 
-                     iteration for authentication.
-        receiver   : str
-                     Authenticator's name
-
-        
-        Returns
-        -------
-        None
-            Does not return anything.
+        :param random_key: Random key generated for this iteration for authentication.
+        :type random_key: str
+        :param receiver: Authenticator's name.
+        :type receiver: str
         """
 
         message = []
@@ -159,20 +142,10 @@ class Prover(Participants):
         """
         Method that encodes the hash key in Qubits.
 
-        Parameters
-        ----------
-
-        hash_value : str
-                     Hash value produced by key
-                     and random_key.
-        receiver   : str
-                     Authenticator's name
-
-        
-        Returns
-        -------
-        None
-            Does not return anything.
+        :param hash_value: Hash value produced by key and random_key.
+        :type hash_value: str
+        :param receiver: Authenticator's name.
+        :type receiver: str
         """
 
         with CQCConnection(self.name) as User:
@@ -187,7 +160,16 @@ class Prover(Participants):
 
 class Authenticator(Participants):
 
+    """
+        Class for Authenticator
+    """
+
     def __init__(self, name):
+
+        """
+            Creates a Authenticator by providing a name
+        """
+
         self.name = name
 
     def authenticate(self, key):
@@ -195,16 +177,11 @@ class Authenticator(Participants):
         """
         Method that takes care of authenticator's job.
 
-        Parameters
-        ----------
+        :param key: Secret Key Shared by two parties.
+        :type key: str
 
-        key        : str
-                     Secret Key Shared by two parties.
-        
-        Returns
-        -------
-        Boolean
-            Result of authentication check.
+        :return: Result of authentication check.
+        :rtype: Boolean
         """
 
         random_key = self.recvRandom()
@@ -216,19 +193,10 @@ class Authenticator(Participants):
     def recvRandom(self):
 
         """
-        Method that receives the random
-        number sent by prover.
+        Method that receives the random number sent by prover.
 
-        Parameters
-        ----------
-
-        None
-            Does not need any paramenters.
-        
-        Returns
-        -------
-        string
-            Returns random key.
+        :return: Returns random key.
+        :rtype: String
         """
 
         with CQCConnection(self.name) as User:
@@ -243,21 +211,13 @@ class Authenticator(Participants):
     def recvDecode(self, hash_value):
 
         """
-        Method that receives the qubits,
-        decodes it and checks for auth.
+        Method that receives the qubits, decodes it and checks for auth.
 
-        Parameters
-        ----------
+        :param hash_value: Hash value produced by key and random_key.
+        :type hash_value: str
 
-        hash_value : str
-                     Hash value produced by key
-                     and random_key.
-
-        
-        Returns
-        -------
-        None
-            Result of authentcation.
+        :return: Result of authentication check.
+        :rtype: Boolean
         """
 
         with CQCConnection(self.name) as User:

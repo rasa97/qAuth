@@ -7,6 +7,11 @@ from cqc.pythonLib import CQCConnection, qubit
 """
 
 class Participant:
+
+    """
+        Class which defines common functions.
+        Prover and Authenticator inherit this class.
+    """
     
     def createEnt(self, qubitA, qubitB, type):
 
@@ -14,24 +19,15 @@ class Participant:
         Method that takes in two qubits and produce one
         of the four Bell states.
 
-        Parameters
-        ----------
+        :param qubitA: First Qubit to the EPR Pair.
+        :type qubitA: Qubit Object
+        :param qubitB: Second Qubit to the EPR Pair.
+        :type qubitB: Qubit Object
+        :param type: Type of EPR ( |phi+>,|phi->,|psi+>,|psi-> )
+        :type type: int
 
-        qubitA : Qubit Object
-                 First Qubit to the EPR Pair.
-        qubitB : Qubit object
-                 Second Qubit to the EPR Pair.
-        type   : int
-                 The type of EPR Pair. 
-                 Type1 : |phi+> 
-                 Type2 : |phi->
-                 Type3 : |psi+>
-                 Type4 : |psi->
-        
-        Returns
-        -------
-        List
-            List of two Quantum Objects that are entangled.
+        :return: List of two Qubit Objects that are entangled.
+        :rtype: List of Qubit objects
         """
 
         if type > 2:
@@ -45,7 +41,16 @@ class Participant:
 
 class Prover(Participant):
 
+    """
+        Class for Prover
+    """
+
     def __init__(self, name):
+
+        """
+            Creates a Prover by providing a name
+        """
+
         self.name = name
         self.idToken = []
         self.auxPairs = []
@@ -56,16 +61,8 @@ class Prover(Participant):
         """
         Method that takes care of prover's job.
 
-        Parameters
-        ----------
-
-        receiver : str
-                 Name of the Authenticator.
-        
-        Returns
-        -------
-        None
-            Does not return anything.
+        :param receiver: Name of the Authenticator.
+        :type receiver: str
         """
 
         with CQCConnection(self.name) as User:
@@ -91,17 +88,6 @@ class Prover(Participant):
 
         """
         Method that applies CNOT operation for the prover.
-
-        Parameters
-        ----------
-
-        None
-            Does not require any parameters.
-        
-        Returns
-        -------
-        None
-            Does not return anything.
         """
 
         for i in range(self.number_tokens):
@@ -110,7 +96,16 @@ class Prover(Participant):
             
 class Authenticator(Participant):
 
+    """
+        Class for Authenticator
+    """
+
     def __init__(self, name):
+
+        """
+            Creates a Authenticator by providing a name
+        """
+
         self.name = name
         self.idToken = []
         self.number_tokens = 4
@@ -121,16 +116,8 @@ class Authenticator(Participant):
         """
         Method that takes care of authenticator's job.
 
-        Parameters
-        ----------
-
-        None
-            Does not require any parameters.
-        
-        Returns
-        -------
-        None
-            Does not return anything.
+        :return: Result of authentication Check.
+        :rtype: Boolean
         """
 
         with CQCConnection(self.name) as User:
@@ -166,17 +153,6 @@ class Authenticator(Participant):
 
         """
         Method that applies CNOT Operation with Aux Pairs and ID Token.
-
-        Parameters
-        ----------
-
-        None
-            Does not require any parameters.
-        
-        Returns
-        -------
-        None
-            Does not return anything.
         """
 
         for i in range(self.number_tokens):
@@ -187,16 +163,8 @@ class Authenticator(Participant):
         """
         Method that does the Bell Measurement of Aux Particles.
 
-        Parameters
-        ----------
-
-        None
-            Does not require any parameters.
-        
-        Returns
-        -------
-        List
-            List of Bell Measurement result.
+        :return: List of Bell Measurement result.
+        :rtype: List of int
         """
 
         measurement = []

@@ -9,6 +9,11 @@ import random
 
 class Participant:
 
+    """
+        Class which defines common functions.
+        Prover and Authenticator inherit this class.
+    """
+
     def prepareSequence(self, key, receiver):
 
         """
@@ -16,18 +21,10 @@ class Participant:
         according to the protocol and 
         sends it to the receiver.
 
-        Parameters
-        ----------
-
-        key        : str
-                     Secret Key Shared by two parties.
-        receiver : str
-                     Authenticator's name.
-        
-        Returns
-        -------
-        None
-            Does not return anything.
+        :param key: Secret Key Shared by two parties.
+        :type key: str
+        :param receiver: Authenticator's name.
+        :type receiver: str
         """
 
         with CQCConnection(self.name) as User:
@@ -51,19 +48,10 @@ class Participant:
         Method that encodes the qubits
         according to the protocol.
 
-        Parameters
-        ----------
-
-        qubit_list : list
-                     Authenticator's name.
-
-        key        : str
-                     Secret Key Shared by two parties.
-        
-        Returns
-        -------
-        None
-            Does not return anything.
+        :param qubit_list: List of qubits to encode.
+        :type qubit_list: list of Qubit Objects
+        :param key: Secret Key Shared by two parties.
+        :type key: str
         """
 
         for i in range(0, len(key)-1, 2):
@@ -76,19 +64,13 @@ class Participant:
         """
         Method that updates the key.
 
-        Parameters
-        ----------
+        :param qubit_list: List of qubits to encode.
+        :type qubit_list: list of Qubit Objects
+        :param key: Secret Key Shared by two parties.
+        :type key: str
 
-        qubit_list : list
-                     Authenticator's name.
-
-        key        : str
-                     Secret Key Shared by two parties.
-        
-        Returns
-        -------
-        string
-            Updated key.
+        :return: Updated Key
+        :rtype: String
         """
 
         k_temp = ["*"]*int(len(key))
@@ -105,7 +87,16 @@ class Participant:
 
 class Authenticator(Participant):
 
+    """
+        Class for Authenticator
+    """
+
     def __init__(self, name):
+
+        """
+            Creates a Authenticator by providing a name
+        """
+
         self.name = name
 
     def authenticate(self, key, receiver):
@@ -113,19 +104,13 @@ class Authenticator(Participant):
         """
         Method that takes care of authenticator's job.
 
-        Parameters
-        ----------
+        :param key: Secret Key Shared by two parties.
+        :type key: str
+        :param receiver: Prover's name.
+        :type receiver: str
 
-        key        : str
-                     Secret Key Shared by two parties.
-        
-        receiver   : str
-                     Prover's name
-        
-        Returns
-        -------
-        Boolean
-            Result of authentication check and updated key.
+        :return: Result of authentication check and updated key.
+        :rtype: Tuple
         """
 
         self.prepareSequence(key, receiver)
@@ -138,16 +123,8 @@ class Authenticator(Participant):
         """
         Method that receives the encoded qubits.
 
-        Parameters
-        ----------
-
-        key        : str
-                     Secret Key Shared by two parties.
-        
-        Returns
-        -------
-        None
-            Does not return anything.
+        :param key: Secret Key Shared by two parties.
+        :type key: str
         """
 
         with CQCConnection(self.name) as User:
@@ -161,16 +138,10 @@ class Authenticator(Participant):
         """
         Method that authenticates the prover.
 
-        Parameters
-        ----------
-
-        key        : str
-                     Secret Key Shared by two parties.
-        
-        Returns
-        -------
-        str
-                Updated key.
+        :param key: Secret Key Shared by two parties.
+        :type key: str
+        :return: Updated Key
+        :rtype: String
         """
 
         with CQCConnection(self.name) as User:
@@ -193,7 +164,16 @@ class Authenticator(Participant):
 
 class Prover(Participant):
 
+    """
+        Class for Prover
+    """
+
     def __init__(self, name):
+
+        """
+            Creates a Prover by providing a name
+        """
+
         self.name = name
     
     def authenticate(self, key, sender):
@@ -201,19 +181,13 @@ class Prover(Participant):
         """
         Method that takes care of prover's job.
 
-        Parameters
-        ----------
+        :param key: Secret Key Shared by two parties.
+        :type key: str
+        :param sender: Authenticator's name.
+        :type sender: str
 
-        key        : str
-                     Secret Key Shared by two parties.
-        
-        sender   : str
-                   Authenticator's name
-        
-        Returns
-        -------
-        str
-            Updated key.
+        :return: Updated Key.
+        :rtype: String
         """
 
         self.recvSequence(key, sender)
@@ -225,19 +199,10 @@ class Prover(Participant):
         Method that receives ping pong particles
         from authenticator.
 
-        Parameters
-        ----------
-
-        key    : str
-                 Secret Key Shared by two parties.
-        
-        name   : str
-                 Authenticator's name
-        
-        Returns
-        -------
-        None
-            Does not return anything.
+        :param key: Secret Key Shared by two parties.
+        :type key: str
+        :param name: Authenticator's name.
+        :type name: str
         """
 
         with CQCConnection(self.name) as User:
@@ -256,19 +221,10 @@ class Prover(Participant):
         Method that encodes ping pong particles
         and send it to the authenticator.
 
-        Parameters
-        ----------
-
-        key         : str
-                      Key Shared by two parties.
-        
-        receiver    : str
-                      Authenticator's name
-        
-        Returns
-        -------
-        None
-            Does not return anything.
+        :param key: Secret Key Shared by two parties.
+        :type key: str
+        :param receiver: Authenticator's name.
+        :type receiver: str
         """
 
         with CQCConnection(self.name) as User:
