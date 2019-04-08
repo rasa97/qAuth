@@ -8,3 +8,5 @@ Install library using `python setup.py install` and the required packages using 
 Start SimulaQron server using `simulaqron start`.
 
 Check out the Zawadzki Protocol by going to qAuth/examples/zwdz and run `sh run.sh`.
+
+Official docs at : https://qauth.readthedocs.io/en/latest/
