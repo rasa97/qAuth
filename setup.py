@@ -4,7 +4,7 @@ setup(
    name='qAuth-rasa97',
    version='0.0.1',
    description='Quantum Authentication Protocols libraries',
-   author_email="rasa97uchiha@gmail.com"
+   author_email="rasa97uchiha@gmail.com",
    author='Ravisankar A V',
    packages=find_packages(),
    include_package_data=True,
