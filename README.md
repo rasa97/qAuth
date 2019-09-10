@@ -10,3 +10,6 @@ Start SimulaQron server using `simulaqron start`.
 Check out the Zawadzki Protocol by going to qAuth/examples/zwdz and run `sh run.sh`.
 
 Official docs at : https://qauth.readthedocs.io/en/latest/
+
+#### pip installation
+`pip install qAuth-rasa97`
